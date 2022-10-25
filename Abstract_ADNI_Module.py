@@ -71,8 +71,9 @@ class Abstract_ADNI_Module(LightningDataModule, ABC):
               f'{n_f} ({n_f / n * 100:3.2f}%) are female and {n_m} ({n_m / n * 100:3.2f}%) are male.')
         print(f'There are {n_ad} ({n_ad / n * 100:3.2f}%) cases with label 3 (AD/pMCI), '
               f'and {n_hc} ({n_hc / n * 100:3.2f}%) cases with label 1 (HC/sMCI).')
-        print(f'Of the AD/pMCI cases, {n_f_ad} ({n_f_ad / n_ad * 100:3.2f}%) are female; '
-              f'of the HC/sMCI cases, {n_f_hc} ({n_f_hc / n_hc * 100:3.2f}%) are female.')
+        if n_ad > 0 and n_hc > 0:
+            print(f'Of the AD/pMCI cases, {n_f_ad} ({n_f_ad / n_ad * 100:3.2f}%) are female; '
+                  f'of the HC/sMCI cases, {n_f_hc} ({n_f_hc / n_hc * 100:3.2f}%) are female.')
 
         if n_f > 0:
             print(f'Of the female subjects, {n_f_ad} ({n_f_ad / n_f * 100:3.2f}%) have AD.')
@@ -86,8 +87,9 @@ class Abstract_ADNI_Module(LightningDataModule, ABC):
         n_15_hc = sum(hc_mask & (df['T'] == 1.5))
 
         print(f'{n_15} ({n_15 / n * 100:3.2f}%) are 1.5T and {n_3} ({n_3 / n * 100:3.2f}%) are 3T.')
-        print(f'Of the AD/pMCI cases, {n_15_ad} ({n_15_ad / n_ad * 100:3.2f}%) are 1.5T; '
-              f'of the HC/sMCI cases, {n_15_hc} ({n_15_hc / n_hc * 100:3.2f}%) are 1.5T.')
+        if n_ad > 0 and n_hc > 0:
+            print(f'Of the AD/pMCI cases, {n_15_ad} ({n_15_ad / n_ad * 100:3.2f}%) are 1.5T; '
+                  f'of the HC/sMCI cases, {n_15_hc} ({n_15_hc / n_hc * 100:3.2f}%) are 1.5T.')
 
         if 'AgeGroup' not in df.columns:
             df.loc[:, 'AgeGroup'] = df.Age > 73.0
@@ -103,8 +105,9 @@ class Abstract_ADNI_Module(LightningDataModule, ABC):
         n_y_f = sum(younger_mask & f_mask)
         n_o_f = sum(older_mask & f_mask)
         print(f'{n_y} ({n_y / n * 100:3.2f}%) are younger and {n_o} ({n_o / n * 100:3.2f}%) are older.')
-        print(f'Of the AD/pMCI cases, {n_y_ad} ({n_y_ad / n_ad * 100:3.2f}%) are younger; '
-              f'of the HC/sMCI cases, {n_y_hc} ({n_y_hc / n_hc * 100:3.2f}%) are younger.')
+        if n_ad > 0 and n_hc > 0:
+            print(f'Of the AD/pMCI cases, {n_y_ad} ({n_y_ad / n_ad * 100:3.2f}%) are younger; '
+                  f'of the HC/sMCI cases, {n_y_hc} ({n_y_hc / n_hc * 100:3.2f}%) are younger.')
         if n_y > 0:
             print(
                 f'Of the younger subjects, {n_y_ad} ({n_y_ad / n_y * 100:3.2f}%) have AD and {n_y_f} ({n_y_f / n_y * 100:3.2f}%) are female.')

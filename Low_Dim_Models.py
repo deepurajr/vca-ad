@@ -14,7 +14,7 @@ from torch.optim.lr_scheduler import ReduceLROnPlateau
 from ADNI_Feature_Module import ADNI_Feature_Module
 from ADNI_Model import ADNI_Model
 from Abstract_ADNI_Module import Abstract_ADNI_Module
-from Repeated_CV_Splitter2 import get_adhc_split_csvs
+from Repeated_CV_Splitter import get_adhc_split_csvs
 
 
 class Low_Dim_ADNI_Model(ADNI_Model):
@@ -236,10 +236,10 @@ if __name__ == '__main__':
                         type=lambda x: bool(strtobool(x)), default=True)
     parser.add_argument("-s", "--split_var", dest="split_var", type=int, default=0)
     parser.add_argument("-a", "--feature_csv_dir", dest="feature_csv_dir", type=str, default="")
-    parser.add_argument("-d", "--split_dir", dest="split_dir", type=str, default="/dtu-compute/ADNIbias/ewipe/splits/")
-    parser.add_argument("-l", "--log_dir", dest="log_dir", type=str, default="/dtu-compute/ADNIbias/ewipe/LR-logs/")
+    parser.add_argument("-d", "--split_dir", dest="split_dir", type=str, default="./csvs/")
+    parser.add_argument("-l", "--log_dir", dest="log_dir", type=str, default="./LR-logs/")
     parser.add_argument("-c", "--chkpt_dir", dest="chkpt_dir", type=str,
-                        default="/dtu-compute/ADNIbias/ewipe/LR-chkpts/")
+                        default="./LR-chkpts/")
     args = parser.parse_args()
 
     if args.split_var == 0:
@@ -252,6 +252,6 @@ if __name__ == '__main__':
         f_ratios = [0, 0.25, 0.5, 0.75, 1.0]
         run_idces = range(0, 5)
         fold_idces = range(0, 5)
-        pool.starmap(train_model, product(*[f_ratios, run_idces, fold_idces, [split_var], [args.split_ver],
+        pool.starmap(train_model, product(*[f_ratios, run_idces, fold_idces, [split_var], [args.split_var],
                                             [args.feature_csv_dir], [args.split_dir], [args.log_dir], [args.chkpt_dir]]))
         pool.close()

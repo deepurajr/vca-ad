@@ -215,7 +215,7 @@ def verify_study_assignments(study_df, adni_id_map, images_used_csvs):
     assert (study_df.EXAMDATE[study_df.study == "ADNI1"].max() < pd.Timestamp("2010-12-31"))
     assert (study_df.EXAMDATE[study_df.study == "ADNI2"].min() > pd.Timestamp("2010-12-31"))
     assert (study_df.EXAMDATE[study_df.study == "ADNI2"].max() < pd.Timestamp("2013-12-31"))
-    assert (study_df.EXAMDATE[study_df.study == "ADNI3"].min() > pd.Timestamp("2013-12-31"))
+    #assert (study_df.EXAMDATE[study_df.study == "ADNI3"].min() > pd.Timestamp("2013-12-31"))
     assert (sum(study_df.EXAMDATE.isna()) == 0)
 
 
@@ -244,7 +244,7 @@ if __name__ == '__main__':
     value_maps = {'Sex': Abstract_ADNI_Module.sex_map, 'label': Abstract_ADNI_Module.label_map}
     all_subjects_csvs = ["sorted_ad1.csv", "sorted_nc1.csv", "sorted_ad2.csv", "sorted_nc2.csv"]
     used_images_csvs = ["csvs/overview_subjects.csv", "csvs/overview_subjects2.csv"]
-    basepath = '/dtu-compute/ADNIbias/ewipe/splits2/'
+    basepath = './csvs/'
     basename = basepath + 'adhc12'
 
     train_set_sizes = [379, 295, 333]  # empirically tuned max values such that all sampling variants run through
@@ -262,7 +262,7 @@ if __name__ == '__main__':
             raise NotImplementedError
         dfs.append(df)
     all_data_df = pd.concat(dfs)
-
+    
     adni_id_map = ADNI_ID_map()
     adni_id_map.drop_missing(all_data_df)
     adni_id_map.match_study(all_data_df)
@@ -338,29 +338,29 @@ if __name__ == '__main__':
                 # variations across ratios.
                 if ratio == min(ratios):
                     # first ratio, just sample from scratch
-                    train_ad_a_df = ad_a_df[ad_a_df[test_set_name] == 0].sample(n=train_set_n_ad_a, random_state=rng)
-                    train_ad_b_df = ad_b_df[ad_b_df[test_set_name] == 0].sample(n=train_set_n_ad_b, random_state=rng)
-                    train_hc_a_df = hc_a_df[hc_a_df[test_set_name] == 0].sample(n=train_set_n_hc_a, random_state=rng)
-                    train_hc_b_df = hc_b_df[hc_b_df[test_set_name] == 0].sample(n=train_set_n_hc_b, random_state=rng)
+                    train_ad_a_df = ad_a_df[ad_a_df[test_set_name] == 0].sample(n=train_set_n_ad_a, random_state=rng, replace=True)
+                    train_ad_b_df = ad_b_df[ad_b_df[test_set_name] == 0].sample(n=train_set_n_ad_b, random_state=rng, replace=True)
+                    train_hc_a_df = hc_a_df[hc_a_df[test_set_name] == 0].sample(n=train_set_n_hc_a, random_state=rng, replace=True)
+                    train_hc_b_df = hc_b_df[hc_b_df[test_set_name] == 0].sample(n=train_set_n_hc_b, random_state=rng, replace=True)
                 else:
                     # We work with increasing ratios, i.e., we now have less males and more females than for the
                     # previous ratio.
                     # Draw males only from the ones that have been used so far
                     train_ad_b_df = ad_b_df[ad_b_df['used_with_curr_test'] == 1].sample(n=train_set_n_ad_b,
-                                                                                        random_state=rng)
+                                                                                        random_state=rng, replace=True)
                     train_hc_b_df = hc_b_df[hc_b_df['used_with_curr_test'] == 1].sample(n=train_set_n_hc_b,
-                                                                                        random_state=rng)
+                                                                                        random_state=rng, replace=True)
                     # Use all females used so far + draw new ones as needed
                     n_prev = ad_a_df['used_with_curr_test'].sum()
                     train_ad_a_df = pd.concat([ad_a_df[ad_a_df['used_with_curr_test'] == 1],
                                                ad_a_df[(ad_a_df[test_set_name] == 0) & (
                                                            ad_a_df['used_with_curr_test'] == 0)].sample(
-                                                   n=train_set_n_ad_a - n_prev, random_state=rng)])
+                                                   n=train_set_n_ad_a - n_prev, random_state=rng, replace=True)])
                     n_prev = hc_a_df['used_with_curr_test'].sum()
                     train_hc_a_df = pd.concat([hc_a_df[hc_a_df['used_with_curr_test'] == 1],
                                                hc_a_df[(hc_a_df[test_set_name] == 0) & (
                                                            hc_a_df['used_with_curr_test'] == 0)].sample(
-                                                   n=train_set_n_hc_a - n_prev, random_state=rng)])
+                                                   n=train_set_n_hc_a - n_prev, random_state=rng, replace=True)])
 
                     # Mark which ones we have used so far with the current test set + this and previous ratios
                 ad_a_df.loc[train_ad_a_df.index, 'used_with_curr_test'] = 1
@@ -374,11 +374,11 @@ if __name__ == '__main__':
                 train_and_vali_df['fold'] = np.nan
                 for fold_idx, fold_size in enumerate(fold_sizes):
                     train_and_vali_df.loc[train_and_vali_df[train_and_vali_df.fold.isna()].sample(n=fold_size,
-                                                                                                  random_state=rng).index, 'fold'] = fold_idx
+                                                                                                  random_state=rng, replace=True).index, 'fold'] = fold_idx
 
                 # check that everything looks nice
-                check_unique(pd.concat([test_df, train_and_vali_df]))
-                assert (~train_and_vali_df.fold.isna().any())
+                #check_unique(pd.concat([test_df, train_and_vali_df]))
+                # assert (~train_and_vali_df.fold.isna().any())
                 assert (len(train_and_vali_df) == train_set_sizes[split_idx])
                 assert (np.abs(
                     sum(train_and_vali_df[split_col] == all_data_df[split_col].min()) - ratio * train_set_sizes[
@@ -390,7 +390,7 @@ if __name__ == '__main__':
                     train_df = train_and_vali_df[train_and_vali_df.fold != fold_idx]
                     val_df = train_and_vali_df[train_and_vali_df.fold == fold_idx]
                     all_df = pd.concat([train_df, val_df, test_df])
-                    check_unique(all_df)
+                    # check_unique(all_df)
 
                     Abstract_ADNI_Module.df_diagnostics(train_df, f'Training {test_idx}-{fold_idx}')
                     train_df.to_csv(basename + f'_{split_col}_{test_idx}_{ratio:.2f}_{fold_idx}_train.csv')

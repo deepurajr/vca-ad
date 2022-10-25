@@ -1,0 +1,2 @@
+RID,Subject ID,Sex,EXAMDATE,Age,study,label,T,PTID,AgeGroup,test_set_0,test_set_1,test_set_2,test_set_3,test_set_4,rerun_0,used_with_curr_test,fold
+4014,041_S_4014,1,2011-03-28,81,ADNI2,0,3.0,041_S_4014,1,0,0,1,0,0,1,0,4.0

@@ -1,0 +1,3 @@
+RID,Subject ID,Sex,EXAMDATE,Age,study,label,T,PTID,AgeGroup,test_set_0,test_set_1,test_set_2,test_set_3,test_set_4,rerun_0,used_with_curr_test,rerun_1,fold
+4756,137_S_4756,1,2012-05-21,84,ADNI2,1,3.0,137_S_4756,1,0,0,0,1,0,1,0,0.0,4.0
+5146,068_S_5146,0,2013-05-02,73,ADNI2,1,3.0,068_S_5146,0,1,0,0,0,0,1,0,0.0,4.0
