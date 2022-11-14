@@ -79,6 +79,7 @@ class ADNI_ID_map():
         df.loc[RIDs_to_use_adni2, 'Path'] = image_paths[1] + PTIDs_adni2 + '/norm_mni305.mgz'
         df.loc[RIDs_to_use_adni3, 'Path'] = image_paths[2] + PTIDs_adni3 + '/norm_mni305.mgz'
 
+        df = df[df['Path'].notna()]
         assert (sum(df['Path'].isna()) == 0)
 
 
@@ -244,7 +245,7 @@ if __name__ == '__main__':
     value_maps = {'Sex': Abstract_ADNI_Module.sex_map, 'label': Abstract_ADNI_Module.label_map}
     all_subjects_csvs = ["sorted_ad1.csv", "sorted_nc1.csv", "sorted_ad2.csv", "sorted_nc2.csv"]
     used_images_csvs = ["csvs/overview_subjects.csv", "csvs/overview_subjects2.csv"]
-    basepath = '/dtu-compute/ADNIbias/ewipe/splits2/'
+    basepath = './splits/'
     basename = basepath + 'adhc12'
 
     train_set_sizes = [379, 295, 333]  # empirically tuned max values such that all sampling variants run through

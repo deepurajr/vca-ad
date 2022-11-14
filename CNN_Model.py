@@ -118,9 +118,13 @@ if __name__ == '__main__':
         split_var = 'AgeGroup'
 
     # Yes, the ADNI3 images are in the ADNI1 directory for some reason
-    image_paths = ["/scratch/ewipe/freesurfer_ADNI1",
-                   "/scratch/ewipe/freesurfer_ADNI2",
-                   "/scratch/ewipe/freesurfer_ADNI1"]
+    # image_paths = ["/scratch/ewipe/freesurfer_ADNI1",
+    #                "/scratch/ewipe/freesurfer_ADNI2",
+    #                "/scratch/ewipe/freesurfer_ADNI1"]
+
+    image_paths = ["./normalized/ADNI1/",
+                   "./normalized/ADNI2/",
+                   "./normalized/ADNI1/"]
 
     for run_idx in args.run_idces:
 
@@ -145,12 +149,14 @@ if __name__ == '__main__':
             trainer = Trainer(
                 logger=tb_logger,
                 max_epochs=200,
-                gpus=[args.gpu],
+                #gpus=[args.gpu],
                 precision=16,
-                callbacks=[StochasticWeightAveraging(), EarlyStopping(monitor="loss/val", patience=60)],
+                callbacks=[StochasticWeightAveraging(swa_lrs=5e-4), EarlyStopping(monitor="loss/val", patience=60)],
                 gradient_clip_val=1.0,
                 enable_checkpointing=False,
-                log_every_n_steps=26)
+                log_every_n_steps=26,
+                accelerator='cpu',
+                devices=1)
 
             trainer.fit(mdl, adni1_dm)
             trainer.save_checkpoint(chkpt_file)

@@ -236,10 +236,10 @@ if __name__ == '__main__':
                         type=lambda x: bool(strtobool(x)), default=True)
     parser.add_argument("-s", "--split_var", dest="split_var", type=int, default=0)
     parser.add_argument("-a", "--feature_csv_dir", dest="feature_csv_dir", type=str, default="")
-    parser.add_argument("-d", "--split_dir", dest="split_dir", type=str, default="/dtu-compute/ADNIbias/ewipe/splits/")
-    parser.add_argument("-l", "--log_dir", dest="log_dir", type=str, default="/dtu-compute/ADNIbias/ewipe/LR-logs/")
+    parser.add_argument("-d", "--split_dir", dest="split_dir", type=str, default="./splits/")
+    parser.add_argument("-l", "--log_dir", dest="log_dir", type=str, default="./LR-logs/")
     parser.add_argument("-c", "--chkpt_dir", dest="chkpt_dir", type=str,
-                        default="/dtu-compute/ADNIbias/ewipe/LR-chkpts/")
+                        default="./LR-chkpts/")
     args = parser.parse_args()
 
     if args.split_var == 0:
