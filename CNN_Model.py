@@ -104,10 +104,10 @@ if __name__ == '__main__':
     # split_var=0 == Sex, split_var=1 == Age
     parser.add_argument("-s", "--split_var", dest="split_var", default=0, type=int)
     parser.add_argument("-a", "--feature_csv_dir", dest="feature_csv_dir", type=str, default="")
-    parser.add_argument("-d", "--split_dir", dest="split_dir", type=str, default="/dtu-compute/ADNIbias/ewipe/splits/")
-    parser.add_argument("-l", "--log_dir", dest="log_dir", type=str, default="/dtu-compute/ADNIbias/ewipe/CNN-logs/")
+    parser.add_argument("-d", "--split_dir", dest="split_dir", type=str, default="./splits/")
+    parser.add_argument("-l", "--log_dir", dest="log_dir", type=str, default="./CNN-logs/")
     parser.add_argument("-c", "--chkpt_dir", dest="chkpt_dir", type=str,
-                        default="/dtu-compute/ADNIbias/ewipe/CNN-chkpts/")
+                        default="./CNN-chkpts/")
     args = parser.parse_args()
 
     assert (isinstance(args.ratio, float))

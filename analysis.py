@@ -85,15 +85,19 @@ if __name__ == '__main__':
     parser.add_argument("-r", "--reload", dest="reload", type=lambda x: bool(strtobool(x)), default=True)
     parser.add_argument("-t", "--test", dest="test", type=lambda x: bool(strtobool(x)), default=True)
     parser.add_argument("-s", "--split_var", dest="split_var", type=int, default=0)
-    parser.add_argument("-l", "--log_dir", dest="log_dir", type=str, default="/dtu-compute/ADNIbias/ewipe")
+    parser.add_argument("-l", "--log_dir", dest="log_dir", type=str, default="./")
     args = parser.parse_args()
     gpus = [args.gpu]
     print(args.reload)
 
     # Yes, the ADNI3 images are in the ADNI1 directory for some reason
-    image_paths = ["/scratch/ewipe/freesurfer_ADNI1",
-                   "/scratch/ewipe/freesurfer_ADNI2",
-                   "/scratch/ewipe/freesurfer_ADNI1"]
+    # image_paths = ["/scratch/ewipe/freesurfer_ADNI1",
+    #                "/scratch/ewipe/freesurfer_ADNI2",
+    #                "/scratch/ewipe/freesurfer_ADNI1"]
+
+    image_paths = ["./normalized/ADNI1/",
+                   "./normalized/ADNI2/",
+                   "./normalized/ADNI1/"]
 
     if args.split_var == 0:
         split_var = 'Sex'
